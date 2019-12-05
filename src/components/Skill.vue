@@ -9,12 +9,7 @@
     </p>
 
     <div class="skill-evaluations">
-      <div class="evaluation" v-for="(evaluation, index) in evaluations" :key="index">
-        <h2 class="evaluation-title">
-          {{ evaluation.name }}
-        </h2>
-        <b-progress type="is-info" :value="evaluation.progress"></b-progress>
-      </div>
+      <b-progress type="is-info" :value="progress"></b-progress>
     </div>
   </div>
 </template>
@@ -24,7 +19,7 @@ export default {
   props: {
     name: String,
     description: String,
-    evaluations: Array
+    progress: Number
   }
 }
 </script>
@@ -43,11 +38,11 @@ export default {
 
     .skill-description {
       font-size: 0.8rem;
-      margin-top: 0.6rem;
+      margin-top: 1.3rem;
     }
 
     .skill-evaluations {
-      margin-top: 0.6rem;
+      margin-top: 1.3rem;
 
       .evaluation {
         margin-top: 0.5rem;

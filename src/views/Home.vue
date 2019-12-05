@@ -18,7 +18,8 @@
     <section class="section">
       <div class="container">
         <div class="skills">
-          <Skill :name="skill.name" :description="skill.description" :evaluations="skill.evaluations" v-for="(skill, index) in skills" :key="index"></Skill>
+          <Skill :name="skill.name" :description="skill.description"
+            :progress="skill.progress" v-for="(skill, index) in skills" :key="index"></Skill>
         </div>
       </div>
     </section>
@@ -66,6 +67,7 @@
         </router-link>
       </div>
     </section>
+    <b-loading :is-full-page="true" :active.sync="isLoading"></b-loading>
   </div>
 </template>
 
@@ -90,6 +92,7 @@ export default {
 
   data () {
     return {
+      isLoading: true,
       myName: '',
       shortTitle: '',
       description: '',
@@ -100,66 +103,7 @@ export default {
       avatarPath: require('../assets/avatar.jpg'),
       coverPath: require('../assets/cover-image.jpg'),
 
-      skills: [
-        {
-          name: 'Web Backend',
-          description: 'Với nhiều năm làm việc trong lĩnh vực thiết kế Web, em có khả năng làm việc với nhiều ngôn ngữ backend khác nhau như: .NET Core, Ruby on Rails, Node.js,...',
-          evaluations: [
-            {
-              name: '.NET Core',
-              progress: 90
-            },
-            {
-              name: 'Ruby & Rails',
-              progress: 85
-            },
-            {
-              name: 'Javascript & Node.js',
-              progress: 75
-            }
-          ]
-        },
-        {
-          name: 'Web Frontend',
-          description: 'Em có khả năng sử dụng thành thạo HTML5, CSS3 cùng các kỹ thuật mới nhất của Frontend như: Flexbox, Grid CSS,... Thông hiểu nhiều loại framework như: ReactJS, VueJS,...',
-          evaluations: [
-            {
-              name: 'HTML, CSS & Javascript',
-              progress: 95
-            },
-            {
-              name: 'ReactJS',
-              progress: 55
-            },
-            {
-              name: 'VueJS',
-              progress: 70
-            }
-          ]
-        },
-        {
-          name: 'Ngoại ngữ Tiếng Anh',
-          description: 'Em có thể đọc và viết Tiếng Anh một cách thành thạo, có khả năng đọc tốt mọi tài liệu chuyên ngành bằng Tiếng Anh. Kỹ năng nghe & nói còn khiêm tốn, tuy nhiên em đang nỗ lực hết mình để cải thiện điều đó.',
-          evaluations: [
-            {
-              name: 'Đọc',
-              progress: 95
-            },
-            {
-              name: 'Viết',
-              progress: 85
-            },
-            {
-              name: 'Nói',
-              progress: 40
-            },
-            {
-              name: 'Nghe',
-              progress: 55
-            }
-          ]
-        }
-      ],
+      skills: [],
 
       experiences: [
         {
@@ -212,9 +156,16 @@ export default {
         this.address = data.Adress
         this.email = data.Email
         this.birthday = dayjs(data.Dob).format('DD/MM/YYYY')
+        this.skills = data.Skills.map(item => ({
+          name: item.NameSkill,
+          description: item.Description,
+          progress: item.Percent
+        }))
         console.log(this.birthday)
       } catch (err) {
         console.log(err)
+      } finally {
+        this.isLoading = false
       }
     }
   },
