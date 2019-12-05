@@ -15,7 +15,8 @@
       Kỹ Năng Cá Nhân
     </HeroTitle>
 
-    <section class="section">
+    <section class="section skills-section"
+    >
       <div class="container">
         <div class="skills">
           <Skill :name="skill.name" :description="skill.description"
@@ -25,7 +26,7 @@
     </section>
 
     <HeroTitle :backgroundImage="require('../assets/experiences-section.jpg')">
-      Qúa Khứ & Kinh Nghiệm
+      Quá Khứ & Kinh Nghiệm
     </HeroTitle>
 
     <section class="section">
@@ -36,6 +37,8 @@
         <Timeline v-for="(experience, index) in experiences" :key="index"
           :imagePath="experience.imagePath ? experience.imagePath : null"
           :time="experience.time"
+          :companyName="experience.companyName"
+          :yearOfExperience="experience.yearOfExperience"
           :content="experience.content"
         ></Timeline>
         <header class="timeline-header">
@@ -45,7 +48,7 @@
     </section>
 
     <HeroTitle :backgroundImage="require('../assets/blog-section.jpg')">
-      Bài viết của tôi
+      Bài Viết Của Tôi
     </HeroTitle>
 
     <section class="section">
@@ -59,6 +62,7 @@
           >
           </BlogItem>
         </div>
+
         <router-link to="/blogs" class="all-blogs">
           <b-icon
             icon="arrow-right-drop-circle"
@@ -147,7 +151,6 @@ export default {
     async loadProfileData () {
       try {
         const res = await axios.get('https://apiblogprofile20191205011822.azurewebsites.net/api/InfoProfile?Info_ID=1&PageSize=0&Size=1')
-        console.log(res)
         const data = res.data.Data[0]
         this.myName = data.FullName
         this.shortTitle = data.Slogan
@@ -161,9 +164,12 @@ export default {
           description: item.Description,
           progress: item.Percent
         }))
+        this.experiences = data.WorkExps.map(item => ({
+          companyName: item.CompanyName,
+          content: item.Description,
+          yearOfExperience: item.YearExp
+        }))
         console.log(this.birthday)
-      } catch (err) {
-        console.log(err)
       } finally {
         this.isLoading = false
       }
@@ -181,6 +187,12 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 1.5rem;
+  }
+
+  .skills-section {
+    background: rgba(255,255,255,1);
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(250,250,250,1) 28%, rgba(246,246,246,1) 53%, rgba(244,244,244,1) 62%, rgba(237,237,237,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=1 );
   }
 
   .all-blogs {
