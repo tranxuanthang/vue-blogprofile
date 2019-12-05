@@ -1,5 +1,5 @@
 <template>
-  <b-navbar wrapper-class="container" spaced :class="{ 'immersive': immersive }">
+  <b-navbar wrapper-class="container" spaced class="immersive">
     <template slot="brand">
       <b-navbar-item tag="router-link" :to="{ path: '/' }">
         <strong>BlogProfile</strong>

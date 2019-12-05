@@ -7,7 +7,7 @@
         </div>
         <div class="info">
           <div class="greet">
-            Xin chào, em là <span class="my-name">{{ myName }}</span>!
+            Xin chào, tôi là <span class="my-name">{{ myName }}</span>!
           </div>
           <div class="short-title">
             {{ shortTitle }}
@@ -15,6 +15,20 @@
           <p class="description">
             {{ description }}
           </p>
+          <b-collapse :open="false" position="is-bottom">
+            <a class="more-info-trigger" slot="trigger" slot-scope="props">
+              <b-icon :icon="!props.open ? 'menu-down' : 'menu-up'"></b-icon>
+              {{ !props.open ? 'Xem thêm' : 'Xem ít hơn' }}
+            </a>
+            <div class="more-info">
+              <ul>
+                <li>Ngày sinh: {{ birthday }}</li>
+                <li>Địa chỉ: {{ address }}</li>
+                <li>Số điện thoại: {{ phoneNumber }}</li>
+                <li>Email: {{ email }}</li>
+              </ul>
+            </div>
+          </b-collapse>
         </div>
       </div>
       <parallax :sectionHeight="50" :speedFactor="0.3">
@@ -33,6 +47,10 @@ export default {
     avatarPath: String,
     myName: String,
     shortTitle: String,
+    address: String,
+    phoneNumber: String,
+    birthday: String,
+    email: String,
     description: String
   },
   components: {
@@ -100,6 +118,21 @@ export default {
         font-weight: bold;
         opacity: 0.6;
       }
+    }
+  }
+
+  .more-info-trigger {
+    display: block;
+    color: #fff;
+    margin-top: 1.1rem;
+  }
+
+  .more-info {
+    color: #ddd;
+    margin-top: 1.1rem;
+
+    li {
+      margin-top: 0.4rem;
     }
   }
 </style>

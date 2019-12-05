@@ -3,6 +3,10 @@
     <PageHeader :myName="myName"
       :shortTitle="shortTitle"
       :description="description"
+      :address="address"
+      :phoneNumber="phoneNumber"
+      :birthday="birthday"
+      :email="email"
       :avatarPath="avatarPath"
       :coverPath="coverPath"
     ></PageHeader>
@@ -71,6 +75,8 @@ import HeroTitle from '../components/HeroTitle'
 import Skill from '../components/Skill'
 import Timeline from '../components/Timeline'
 import BlogItem from '../components/BlogItem'
+import axios from 'axios'
+import dayjs from 'dayjs'
 
 export default {
   name: 'home',
@@ -84,11 +90,16 @@ export default {
 
   data () {
     return {
-      myName: 'Phương Anh',
-      shortTitle: 'Nhà phát triển & thiết kế Web',
-      description: 'Tên em là Trần Thị Phương Anh. Em sinh ra và lớn lên tại một tỉnh thành nhỏ miền núi Tây Bắc - tỉnh Yên Bái thân thương - nơi có những ngọn núi xa xăm quanh năm phủ trắng sương mù, nơi có những thửa ruộng bậc thang xanh ngắt bao la. Bước chân vào ngành Công nghệ thông tin, em mong muốn một ngày sẽ đủ khả năng để xây dựng quê hương mình thành một vùng đất giàu sang, tươi đẹp hơn.',
+      myName: '',
+      shortTitle: '',
+      description: '',
+      birthday: '',
+      address: '',
+      phoneNumber: '',
+      email: '',
       avatarPath: require('../assets/avatar.jpg'),
       coverPath: require('../assets/cover-image.jpg'),
+
       skills: [
         {
           name: 'Web Backend',
@@ -149,6 +160,7 @@ export default {
           ]
         }
       ],
+
       experiences: [
         {
           imagepath: null,
@@ -166,6 +178,7 @@ export default {
           content: 'Thực tập phát triển Web với Ruby on Rails tại Sun* Education.'
         }
       ],
+
       blogItems: [
         {
           title: 'Neque libero convallis eget',
@@ -184,6 +197,30 @@ export default {
         }
       ]
     }
+  },
+
+  methods: {
+    async loadProfileData () {
+      try {
+        const res = await axios.get('https://apiblogprofile20191205011822.azurewebsites.net/api/InfoProfile?Info_ID=1&PageSize=0&Size=1')
+        console.log(res)
+        const data = res.data.Data[0]
+        this.myName = data.FullName
+        this.shortTitle = data.Slogan
+        this.description = data.Description
+        this.phoneNumber = data.NumberPhone
+        this.address = data.Adress
+        this.email = data.Email
+        this.birthday = dayjs(data.Dob).format('DD/MM/YYYY')
+        console.log(this.birthday)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  },
+
+  mounted () {
+    this.loadProfileData()
   }
 }
 </script>
