@@ -23,7 +23,7 @@ export default {
       type: String
     },
     companyName: String,
-    yearOfExperience: String,
+    yearOfExperience: Number,
     content: String
   }
 }

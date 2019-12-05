@@ -10,6 +10,7 @@
         <div class="blog-items">
           <BlogItem v-for="(blogItem, index) in blogItems"
             :key="index"
+            :id="blogItem.id"
             :title="blogItem.title"
             :time="blogItem.time"
             :image="blogItem.image"
@@ -23,6 +24,7 @@
           :per-page="perPage"
           icon-prev="chevron-left"
           icon-next="chevron-right"
+          @change="onPageChange"
         >
         </b-pagination>
       </div>
@@ -34,33 +36,17 @@
 import Navbar from '../components/Navbar'
 import HeroTitle from '../components/HeroTitle'
 import BlogItem from '../components/BlogItem'
+import axios from 'axios'
 
 export default {
   name: 'blog',
 
   data () {
     return {
-      totalItems: 35,
+      totalItems: -1,
       currentPage: 1,
       perPage: 10,
-
-      blogItems: [
-        {
-          title: 'Neque libero convallis eget',
-          time: '2019-12-05T10:57:05+07:00',
-          image: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/450744/karl-magnuson.jpg'
-        },
-        {
-          title: 'Tege sillavnoc orebil euqen',
-          time: '2019-12-05T10:57:05+07:00',
-          image: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/450744/etienne-bosiger.jpg'
-        },
-        {
-          title: 'Oirje osdk jggg lskdsdsd meee',
-          time: '2019-12-05T10:57:05+07:00',
-          image: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/450744/saksham-gangwar.jpg'
-        }
-      ]
+      blogItems: []
     }
   },
 
@@ -68,6 +54,54 @@ export default {
     Navbar,
     HeroTitle,
     BlogItem
+  },
+
+  methods: {
+    async getBlogPosts (currentPage, perPage) {
+      const res = await axios.get(`https://apiblogprofile20191205011822.azurewebsites.net/api/BlogApi?PageSize=${currentPage - 1}&Size=${perPage}`)
+      const data = res.data.Data
+      this.blogItems = data.map(item => {
+        let coverImageId = null
+        if (item.ImageTypes) {
+          coverImageId = item.ImageTypes.find(item => {
+            const typeImage = parseInt(item.TypeImage.trim())
+            return typeImage === 1
+          })
+          if (coverImageId) {
+            coverImageId = coverImageId.ImageID
+          }
+        }
+
+        if (coverImageId) {
+          return {
+            id: item.BlogID,
+            title: item.TitleBlog,
+            time: item.PublicationDate,
+            image: `https://apiblogprofile20191205011822.azurewebsites.net/Images/GetBaseImage/${coverImageId}`
+          }
+        } else {
+          return {
+            id: item.BlogID,
+            title: item.TitleBlog,
+            time: item.PublicationDate,
+            image: null
+          }
+        }
+      })
+      this.totalItems = res.data.SizePage
+    },
+
+    onPageChange (value) {
+      this.getBlogPosts(value, this.perPage)
+      this.$router.push({ name: 'blog', params: { page: value } })
+    }
+  },
+
+  mounted () {
+    if (this.$route.params.page) {
+      this.currentPage = this.$route.params.page
+    }
+    this.getBlogPosts(this.currentPage, this.perPage)
   }
 }
 </script>

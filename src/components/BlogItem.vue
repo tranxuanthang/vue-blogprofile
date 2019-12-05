@@ -1,5 +1,5 @@
 <template>
-  <a class="blog-item"
+  <router-link :to="{name: 'blog-content', params: {id: id}}" class="blog-item"
     v-bind:style="{ backgroundImage:
             `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
             url(${image})` }"
@@ -10,7 +10,7 @@
     <div class="blog-meta">
       {{ time | relativeTime }}
     </div>
-  </a>
+  </router-link>
 </template>
 
 <script>
@@ -20,6 +20,7 @@ dayjs.extend(relativeTime)
 
 export default {
   props: {
+    id: Number,
     title: String,
     time: String,
     image: String

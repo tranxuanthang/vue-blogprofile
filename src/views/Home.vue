@@ -55,6 +55,7 @@
       <div class="container">
         <div class="blog-items">
           <BlogItem v-for="(blogItem, index) in blogItems"
+            :id="blogItem.id"
             :key="index"
             :title="blogItem.title"
             :time="blogItem.time"
@@ -96,54 +97,19 @@ export default {
 
   data () {
     return {
-      isLoading: true,
-      myName: '',
-      shortTitle: '',
-      description: '',
-      birthday: '',
-      address: '',
-      phoneNumber: '',
-      email: '',
+      isLoading: false,
+      myName: '...',
+      shortTitle: '...',
+      description: '...',
+      birthday: '...',
+      address: '...',
+      phoneNumber: '...',
+      email: '...',
       avatarPath: require('../assets/avatar.jpg'),
       coverPath: require('../assets/cover-image.jpg'),
-
       skills: [],
-
-      experiences: [
-        {
-          imagepath: null,
-          time: 'Tháng 2 năm 1998',
-          content: '<code>printf("Hello, World!");</code>'
-        },
-        {
-          imagepath: null,
-          time: 'Tháng 9 năm 2016',
-          content: `Bắt đầu học tại trường học viện kỹ thuật quân sự, chuyên ngành kỹ thuật phần mềm.<br><img src="${require('../assets/hvktqs.jpg')}" alt="HVKTQS">`
-        },
-        {
-          imagePath: require('../assets/sun-asterisk.jpg'),
-          time: 'Tháng 2 năm 2019',
-          content: 'Thực tập phát triển Web với Ruby on Rails tại Sun* Education.'
-        }
-      ],
-
-      blogItems: [
-        {
-          title: 'Neque libero convallis eget',
-          time: '2019-12-05T10:57:05+07:00',
-          image: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/450744/karl-magnuson.jpg'
-        },
-        {
-          title: 'Tege sillavnoc orebil euqen',
-          time: '2019-12-05T10:57:05+07:00',
-          image: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/450744/etienne-bosiger.jpg'
-        },
-        {
-          title: 'Oirje osdk jggg lskdsdsd meee',
-          time: '2019-12-05T10:57:05+07:00',
-          image: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/450744/saksham-gangwar.jpg'
-        }
-      ]
+      experiences: [],
+      blogItems: []
     }
   },
 
@@ -172,11 +138,45 @@ export default {
       } finally {
         this.isLoading = false
       }
+    },
+
+    async loadFewBlogPosts () {
+      const res = await axios.get(`https://apiblogprofile20191205011822.azurewebsites.net/api/BlogApi?PageSize=0&Size=3`)
+      const data = res.data.Data
+      this.blogItems = data.map(item => {
+        let coverImageId = null
+        if (item.ImageTypes) {
+          coverImageId = item.ImageTypes.find(item => {
+            const typeImage = parseInt(item.TypeImage.trim())
+            return typeImage === 1
+          })
+          if (coverImageId) {
+            coverImageId = coverImageId.ImageID
+          }
+        }
+
+        if (coverImageId) {
+          return {
+            id: item.BlogID,
+            title: item.TitleBlog,
+            time: item.PublicationDate,
+            image: `https://apiblogprofile20191205011822.azurewebsites.net/Images/GetBaseImage/${coverImageId}`
+          }
+        } else {
+          return {
+            id: item.BlogID,
+            title: item.TitleBlog,
+            time: item.PublicationDate,
+            image: null
+          }
+        }
+      })
     }
   },
 
   mounted () {
     this.loadProfileData()
+    this.loadFewBlogPosts()
   }
 }
 </script>

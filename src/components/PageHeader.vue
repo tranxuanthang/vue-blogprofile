@@ -89,6 +89,7 @@ export default {
 
     .avatar {
       grid-area: avatar;
+      width: 300px;
 
       .my-avatar {
         border-radius: 50%;
