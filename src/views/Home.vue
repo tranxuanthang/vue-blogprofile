@@ -169,7 +169,6 @@ export default {
           content: item.Description,
           yearOfExperience: item.YearExp
         }))
-        console.log(this.birthday)
       } finally {
         this.isLoading = false
       }
