@@ -38,6 +38,30 @@
         </header>
       </div>
     </section>
+
+    <HeroTitle :backgroundImage="require('../assets/blog-section.jpg')">
+      Bài viết của tôi
+    </HeroTitle>
+
+    <section class="section">
+      <div class="container">
+        <div class="blog-items">
+          <BlogItem v-for="(blogItem, index) in blogItems"
+            :key="index"
+            :title="blogItem.title"
+            :time="blogItem.time"
+            :image="blogItem.image"
+          >
+          </BlogItem>
+        </div>
+        <router-link to="/blogs" class="all-blogs">
+          <b-icon
+            icon="arrow-right-drop-circle"
+            size="is-small"></b-icon>
+            Tất cả bài viết
+        </router-link>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -46,6 +70,7 @@ import PageHeader from '../components/PageHeader'
 import HeroTitle from '../components/HeroTitle'
 import Skill from '../components/Skill'
 import Timeline from '../components/Timeline'
+import BlogItem from '../components/BlogItem'
 
 export default {
   name: 'home',
@@ -53,8 +78,10 @@ export default {
     PageHeader,
     HeroTitle,
     Skill,
-    Timeline
+    Timeline,
+    BlogItem
   },
+
   data () {
     return {
       myName: 'Phương Anh',
@@ -138,6 +165,23 @@ export default {
           time: 'Tháng 2 năm 2019',
           content: 'Thực tập phát triển Web với Ruby on Rails tại Sun* Education.'
         }
+      ],
+      blogItems: [
+        {
+          title: 'Neque libero convallis eget',
+          time: '2019-12-05T10:57:05+07:00',
+          image: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/450744/karl-magnuson.jpg'
+        },
+        {
+          title: 'Tege sillavnoc orebil euqen',
+          time: '2019-12-05T10:57:05+07:00',
+          image: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/450744/etienne-bosiger.jpg'
+        },
+        {
+          title: 'Oirje osdk jggg lskdsdsd meee',
+          time: '2019-12-05T10:57:05+07:00',
+          image: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/450744/saksham-gangwar.jpg'
+        }
       ]
     }
   }
@@ -149,5 +193,11 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 1.5rem;
+  }
+
+  .all-blogs {
+    padding: 1.1rem;
+    display: block;
+    text-align: right;
   }
 </style>

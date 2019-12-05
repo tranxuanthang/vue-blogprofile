@@ -3,7 +3,12 @@
     v-bind:style="{ backgroundImage:
             `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
             url(${backgroundImage})` }"
+    :class="{ 'fixed-background': isFixed }"
   >
+    <div class="hero-head">
+      <slot name="header">
+      </slot>
+    </div>
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
@@ -17,15 +22,18 @@
 <script>
 export default {
   props: {
-    backgroundImage: String
+    backgroundImage: String,
+    isFixed: {
+      default: true,
+      type: Boolean
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .hero-heading {
-    background-attachment: fixed;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     backdrop-filter: brightness(30%);
@@ -34,6 +42,11 @@ export default {
       .title {
         color: #fff;
       }
+    }
+
+    &.fixed-background {
+      background-attachment: fixed;
+      background-position: center;
     }
   }
 </style>

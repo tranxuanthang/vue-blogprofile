@@ -1,5 +1,6 @@
 <template>
     <section class="hero parallax-container">
+      <Navbar :immersive="true"></Navbar>
       <div class="parallax-content">
         <div class="avatar">
           <img :src="avatarPath" class="my-avatar">
@@ -24,6 +25,7 @@
 
 <script>
 import Parallax from 'vue-parallaxy'
+import Navbar from './Navbar'
 
 export default {
   props: {
@@ -34,7 +36,8 @@ export default {
     description: String
   },
   components: {
-    Parallax
+    Parallax,
+    Navbar
   }
 }
 </script>
