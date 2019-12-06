@@ -12,9 +12,6 @@
       <b-navbar-item tag="router-link" :to="{ path: '/blogs' }">
         Blog
       </b-navbar-item>
-      <b-navbar-item href="#">
-        Liên hệ
-      </b-navbar-item>
     </template>
   </b-navbar>
 </template>
