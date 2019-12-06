@@ -15,7 +15,7 @@
 
     <section class="section">
       <div class="container blog-content">
-        {{ content }}
+        <span v-html="content"></span>
       </div>
     </section>
   </div>
